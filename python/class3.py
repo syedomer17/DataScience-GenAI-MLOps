@@ -49,7 +49,7 @@ x = str(x) # converting integer to string
 print(type(x))
 
 # your can't convert a string to an integer or float if the string contains non-numeric characters
-y = "23"
+y = "23" 
 print(type(y))
 y = int(y) # converting string to integer
 print(type(y))
@@ -73,3 +73,4 @@ print(f'Hi, my name is {name}')
 
 age = int(input("What is your age? "))
 print(f'I am {age} years old.')
+
