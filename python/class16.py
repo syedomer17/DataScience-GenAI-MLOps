@@ -66,3 +66,43 @@ for i in range(len(a) // 2):
     a[i], a[b] = a[b], a[i] # we are swapping the elements of the list
     b -= 1
 print(a) # [50, 40, 30, 20, 10]
+
+a = [12,13,14,15,16,17,23,24,25,36,78,90]
+
+search = int(input("Enter the number to search:"))
+
+start = 0
+last = len(a) - 1
+mid = (start + last) // 2 
+
+while start <= last: 
+    if a[mid] == search: 
+        print(f"element found at index {mid + 1}")
+        break
+    elif a[mid] < search: 
+        start = mid + 1
+        mid = (start + last) // 2
+    else: 
+        last = mid - 1 
+        mid = (start + last) // 2
+else: 
+    print("element not found in the list")
+
+a = [12,13,14,15,16,17,23,24,25,36,78,90]
+
+for i in range(len(a) - 1):
+    for j in range(len(a) - 1 - i): 
+        if a[j] > a[j + 1]: 
+            a[j], a[j + 1] = a[j + 1], a[j] # we are swapping the elements of the list
+print(a) # [12, 13, 14, 15, 16, 17, 23, 24, 25, 36, 78, 90]
+
+a = [12,13,14,15,16,17,23,24,25,36,78,90]
+
+for i in range(len(a) - 1): 
+    j = i + 1
+    min = i 
+    for k in range(j, len(a)): 
+        if a[k] < a[min]:
+            min = k
+        a[i], a[min] = a[min], a[i] # we are swapping the elements of the list
+print(a) # [12, 13, 14, 15, 16, 17, 23, 24, 25, 36, 78, 90]
