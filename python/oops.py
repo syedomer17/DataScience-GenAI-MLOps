@@ -256,3 +256,6 @@ class Animal(ABC):
 class Dog(Animal): 
     def sound(self): # we alwasy neeed to make this method in the child class otherwise we will get an error because the method sound is an abstract method and it must be implemented in the child class
         print("Woof")
+    
+# dunder methods in python
+# Dunder methods are special methods in python that have double underscores before and after their name. They are also known as magic methods or special methods. They are used to define the behavior of an object when it is used in a certain way. For example, the __str__ method is used to define the string representation of an object when it is printed.
