@@ -1,0 +1,34 @@
+{
+    "books": [
+        {
+            "id": "B-WZO6F",
+            "title": "goat",
+            "author": "omer",
+            "copies": 30,
+            "available_copies": 30,
+            "added_on": "2026-05-03 15:20:23"
+        },
+        {
+            "id": "B-FMFQD",
+            "title": "breaking bad",
+            "author": "ali",
+            "copies": 25,
+            "available_copies": 24,
+            "added_on": "2026-05-03 15:21:52"
+        }
+    ],
+    "members": [
+        {
+            "id": "M-P4R2W",
+            "name": "syed omer ali",
+            "email": "syedomerali2006@gmail.com",
+            "borrowed": [
+                {
+                    "book_id": "B-FMFQD",
+                    "title": "breaking bad",
+                    "borrowed_on": "2026-05-03 18:28:09"
+                }
+            ]
+        }
+    ]
+}

@@ -259,3 +259,37 @@ class Dog(Animal):
     
 # dunder methods in python
 # Dunder methods are special methods in python that have double underscores before and after their name. They are also known as magic methods or special methods. They are used to define the behavior of an object when it is used in a certain way. For example, the __str__ method is used to define the string representation of an object when it is printed.
+
+class Students: 
+    def __init__(self,name,marks):
+        self.name = name
+        self.marks = marks
+    
+    def __str__(self):
+        return f"Name: {self.name}\nMarks: {self.marks}"
+
+obj = Students("John", 85)
+print(obj) # this will print the string representation of the object obj because we have defined the __str__ method in the class Students if we don't use the __str__ method then it will print the memory address of the object obj
+
+class Shopping: 
+    def __init__(self,items,price):
+        self.items = items
+        self.price = price
+
+    def __len__(self):
+        return len(self.items)
+    
+obj = Shopping(["apple","banana","orange"], [1,2,3])
+print(len(obj)) # this will print the number of items in the shopping list because we have defined the __len__ method in the class Shopping if we don't use the __len__ method then it will raise an error because the len() function will not know how to calculate the length of the object obj
+    
+class Numbers: 
+    def __init__(self,numbers):
+        self.numbers = numbers
+
+    def __add__(self, other):
+        return Numbers(self.numbers + other.numbers)
+    
+obj1 = Numbers([1,2,3])
+obj2 = Numbers([4,5,6])
+obj3 = obj1 + obj2 # this will call the __add__ method of the class Numbers and will return a new object of the class Numbers with the combined list of numbers from obj1 and obj2
+print(obj3.numbers) # this will print the combined list of numbers from obj1 and obj2
