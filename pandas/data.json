@@ -1,0 +1,26 @@
+[
+  {
+    "id": 1,
+    "name": "Omer",
+    "age": 20,
+    "city": "Hyderabad",
+    "salary": 45000,
+    "department": "Engineering"
+  },
+  {
+    "id": 2,
+    "name": "Ali",
+    "age": 21,
+    "city": "Mumbai",
+    "salary": 50000,
+    "department": "Marketing"
+  },
+  {
+    "id": 3,
+    "name": "Sara",
+    "age": null,
+    "city": "Delhi",
+    "salary": 47000,
+    "department": "HR"
+  }
+]
