@@ -129,3 +129,60 @@ SELECT * FROM product;
    1 | Omer |       44 |  5.45 | 2026-08-30 20:50:00 | t
 (1 row)
 ```
+
+### C. Updating Data in a Table
+To update existing rows in a table, use the `UPDATE` statement:
+```sql
+UPDATE table_name SET column_name = new_value WHERE condition_column = value;
+```
+
+**Example:**
+```sql
+UPDATE product SET price = 10.23 WHERE sno = 1;
+```
+
+> [!WARNING]
+> Always include a `WHERE` clause when updating data. If you omit it, every row in the table will be updated!
+
+### D. Deleting Rows from a Table
+To delete specific rows from a table, use the `DELETE` statement:
+```sql
+DELETE FROM table_name WHERE condition_column = value;
+```
+
+**Example:**
+```sql
+DELETE FROM product WHERE sno = 1;
+```
+
+> [!WARNING]
+> Always include a `WHERE` clause when deleting data. If you omit it, every row in the table will be deleted!
+
+---
+
+## 4. Table Deletion
+
+### A. Deleting (Dropping) a Table
+To completely remove a table structure and all of its data from the database, use the `DROP TABLE` statement:
+```sql
+DROP TABLE table_name;
+```
+
+**Example:**
+```sql
+DROP TABLE product;
+```
+
+---
+
+## 5. Constraints
+Constraints are rules applied to columns to limit the type of data that can be inserted. This helps maintain data accuracy and reliability.
+
+1. **PRIMARY KEY**: Uniquely identifies each row in a table. It must contain unique values and cannot contain `NULL` values.
+2. **NOT NULL**: Ensures that a column cannot have a `NULL` value.
+3. **UNIQUE**: Ensures that all values in a column are different/unique.
+4. **DEFAULT**: Automatically inserts a predefined value into a column when a new row is added and no value is specified.
+5. **CHECK**: Ensures that all values in a column satisfy a specific validation condition.
+6. **FOREIGN KEY**: Used to link tables together and maintain connections between them.
+
+
