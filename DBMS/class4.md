@@ -98,3 +98,201 @@ You can filter the data before exporting by using a `SELECT` query inside the `\
 ```sql
 \copy (SELECT * FROM customers WHERE age < 20) TO '/Users/syedomerali/Dummy.csv' DELIMITER ',' CSV HEADER;
 ```
+
+---
+
+## 4. SQL Clauses, Operators, and Filtering
+
+SQL clauses and operators are built-in keywords used to filter, sort, limit, group, and summarize data from database tables.
+
+---
+
+### A. `WHERE` Clause
+- **Explanation**: Used to filter rows that meet a specific condition. Only records where the condition evaluates to `TRUE` are returned.
+- **Syntax**:
+  ```sql
+  SELECT column1, column2, ...
+  FROM table_name
+  WHERE condition;
+  ```
+- **Example**:
+  ```sql
+  -- Select all customers who are older than 18
+  SELECT * FROM customers 
+  WHERE age > 18;
+  ```
+
+---
+
+### B. `ORDER BY` Clause
+- **Explanation**: Sorts the query result set in ascending (`ASC`) or descending (`DESC`) order based on one or more columns.
+- **Note**: By default, `ORDER BY` sorts in ascending (`ASC`) order if no direction is specified.
+- **Syntax**:
+  ```sql
+  SELECT column1, column2, ...
+  FROM table_name
+  ORDER BY column_name [ASC | DESC];
+  ```
+- **Examples**:
+  ```sql
+  -- Sort customers by created_at in descending order (newest first)
+  SELECT * FROM customers 
+  ORDER BY created_at DESC;
+
+  -- Sort by age ascending, and then by name ascending
+  SELECT * FROM customers 
+  ORDER BY age ASC, name ASC;
+  ```
+
+---
+
+### C. `LIMIT` and `OFFSET` Clauses
+- **Explanation**:
+  - `LIMIT`: Restricts the maximum number of rows returned by a query (e.g., top 5 records).
+  - `OFFSET`: Skips a specified number of rows before beginning to return results.
+  - When used together, `LIMIT` and `OFFSET` enable pagination (e.g., displaying records page by page).
+- **Syntax**:
+  ```sql
+  SELECT column1, column2, ...
+  FROM table_name
+  [ORDER BY column_name]
+  LIMIT number_of_rows OFFSET number_to_skip;
+  ```
+- **Examples**:
+  ```sql
+  -- Get the top 5 newest customers
+  SELECT * FROM customers 
+  ORDER BY created_at DESC 
+  LIMIT 5;
+
+  -- Skip the first 5 records and return the next 5 records (Page 2)
+  SELECT * FROM customers 
+  ORDER BY id ASC 
+  LIMIT 5 OFFSET 5;
+  ```
+
+---
+
+### D. `DISTINCT` Keyword
+- **Explanation**: Removes duplicate rows from the query results, returning only unique values or unique combinations of values.
+- **Syntax**:
+  ```sql
+  SELECT DISTINCT column1, column2, ...
+  FROM table_name;
+  ```
+- **Example**:
+  ```sql
+  -- Get all unique ages from the customers table sorted from oldest to youngest
+  SELECT DISTINCT age 
+  FROM customers 
+  ORDER BY age DESC;
+  ```
+
+---
+
+### E. `BETWEEN` Operator
+- **Explanation**: A logical operator used within a `WHERE` clause to select values within a continuous, inclusive range (both start and end boundaries are included).
+- **Syntax**:
+  ```sql
+  SELECT column1, column2, ...
+  FROM table_name
+  WHERE column_name BETWEEN value1 AND value2;
+  ```
+- **Example**:
+  ```sql
+  -- Select customers whose age is between 18 and 25 (inclusive)
+  SELECT * FROM customers 
+  WHERE age BETWEEN 18 AND 25;
+  ```
+
+---
+
+### F. `IN` Operator
+- **Explanation**: A logical operator used in a `WHERE` clause to check if a column's value matches any value in a specified list. It serves as a cleaner shorthand for multiple `OR` conditions.
+- **Syntax**:
+  ```sql
+  SELECT column1, column2, ...
+  FROM table_name
+  WHERE column_name IN (value1, value2, ...);
+  ```
+- **Example**:
+  ```sql
+  -- Select customers whose age is either 18, 19, or 25
+  SELECT * FROM customers 
+  WHERE age IN (18, 19, 25);
+  ```
+
+---
+
+### G. `LIKE` and `ILIKE` Operators
+- **Explanation**:
+  - `LIKE`: Searches for a specific text pattern within a column. It is **case-sensitive**.
+  - `ILIKE`: A PostgreSQL-specific extension that performs **case-insensitive** pattern matching.
+  - **Pattern Wildcards**:
+    - `%` : Represents zero, one, or multiple characters.
+    - `_` : Represents exactly one single character.
+- **Syntax**:
+  ```sql
+  -- Case-sensitive search
+  SELECT column1, column2, ...
+  FROM table_name
+  WHERE column_name LIKE 'pattern';
+
+  -- Case-insensitive search (PostgreSQL)
+  SELECT column1, column2, ...
+  FROM table_name
+  WHERE column_name ILIKE 'pattern';
+  ```
+- **Examples**:
+  ```sql
+  -- Match names starting with capital 'A' (e.g., 'Ali')
+  SELECT * FROM customers 
+  WHERE name LIKE 'A%';
+
+  -- Match emails containing 'omer' regardless of uppercase or lowercase (e.g., 'omer@gmail.com', 'OMER@GMAIL.COM')
+  SELECT * FROM customers 
+  WHERE email ILIKE '%omer%';
+
+  -- Match names where the second letter is 'a' (e.g., 'Sam', 'Dan')
+  SELECT * FROM customers 
+  WHERE name LIKE '_a%';
+  ```
+
+---
+
+### H. `GROUP BY` Clause
+- **Explanation**: Groups rows that share identical values in specified columns into summary rows. It is most commonly used with aggregate functions (such as `COUNT()`, `SUM()`, `AVG()`, `MAX()`, `MIN()`) to compute summary metrics per group.
+- **Syntax**:
+  ```sql
+  SELECT column_name, AGGREGATE_FUNCTION(column_name)
+  FROM table_name
+  GROUP BY column_name;
+  ```
+- **Example**:
+  ```sql
+  -- Count how many customers exist for each age
+  SELECT age, COUNT(*) AS total_customers 
+  FROM customers 
+  GROUP BY age 
+  ORDER BY age DESC;
+  ```
+
+---
+
+### I. `HAVING` Clause
+- **Explanation**: Filters grouped records and aggregate function results. While `WHERE` filters individual rows *before* grouping, `HAVING` filters groups *after* the `GROUP BY` aggregation has been performed.
+- **Syntax**:
+  ```sql
+  SELECT column_name, AGGREGATE_FUNCTION(column_name)
+  FROM table_name
+  GROUP BY column_name
+  HAVING AGGREGATE_CONDITION;
+  ```
+- **Example**:
+  ```sql
+  -- Find only the age groups that have more than 4 customers
+  SELECT age, COUNT(*) AS total_customers 
+  FROM customers 
+  GROUP BY age 
+  HAVING COUNT(*) > 4;
+  ```
