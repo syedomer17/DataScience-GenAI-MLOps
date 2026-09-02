@@ -291,4 +291,3 @@ WHERE email IS NOT NULL;
 | Opposite / Negation | `NOT` | `SELECT * FROM customers WHERE NOT is_active;` |
 | Check for missing values | `IS NULL` | `SELECT * FROM customers WHERE city IS NULL;` |
 | Check for non-missing values | `IS NOT NULL` | `SELECT * FROM customers WHERE city IS NOT NULL;` |
- 
