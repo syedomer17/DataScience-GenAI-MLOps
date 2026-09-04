@@ -30,7 +30,83 @@ CREATE TABLE customers (
 );
 ```
 
-### C. Inspect Table Schema
+### C. Deep Dive: Primary Key & Foreign Key Explained
+
+Database tables often store related information across multiple tables. To keep data organized, accurate, and free of duplicates, relational databases rely on **Keys**—specifically **Primary Keys** and **Foreign Keys**.
+
+#### 1. What is a Primary Key (PK) and What Does It Do?
+
+A **Primary Key** is a column (or combination of columns) that **uniquely identifies every individual row** in a table.
+
+- **Purpose & What It Does**:
+  - **Guarantees Uniqueness (Entity Integrity)**: Ensures that no two rows have identical identifier values. For example, two customers might share the same name ("Omer"), but each will have a unique `id` (e.g., Customer 1 vs. Customer 2).
+  - **Prevents Missing Values**: A primary key column can **never contain `NULL`** values. Every record must have an identifiable key.
+  - **High-Speed Searching**: Under the hood, PostgreSQL automatically creates a unique **B-Tree index** on the primary key, making queries searching by ID (like `WHERE id = 5`) extremely fast.
+  - **One Per Table**: A table can have only **one** primary key. (Note: It can be a single column, or a *composite key* made up of two or more columns).
+
+- **How It is Used in Our Example**:
+  In the `customers` table:
+  ```sql
+  id SERIAL PRIMARY KEY
+  ```
+  - `SERIAL` creates an auto-incrementing integer sequence (`1, 2, 3...`) whenever a new record is added.
+  - `PRIMARY KEY` guarantees that `id` will never be duplicated and never be `NULL`.
+
+---
+
+#### 2. What is a Foreign Key (FK) and What Does It Do?
+
+A **Foreign Key** is a column (or set of columns) in one table that **references the Primary Key of another table**. It creates and enforces a relationship between two tables.
+
+- **Purpose & What It Does**:
+  - **Enforces Referential Integrity**: It guarantees that you cannot insert invalid or "orphaned" records into the child table. A child record must point to a legitimate, existing row in the parent table.
+  - **Builds Relationships**: It connects related data across tables (e.g., connecting an order to the specific customer who placed it).
+  - **Allows Multiple References (Duplicates)**: Unlike a primary key, a foreign key column *can* have duplicate values. For instance, one customer can place multiple orders; each order record will carry that same customer's `id`.
+  - **Allows NULLs (Optional Relationships)**: Unless explicitly configured with `NOT NULL`, a foreign key column can accept `NULL` values (e.g., an order not yet assigned to any customer).
+  - **Maintains Consistency during Deletion/Update**: You can specify what happens when a referenced parent record is deleted or updated:
+    - `ON DELETE CASCADE`: If a customer is deleted, all orders belonging to that customer are automatically deleted.
+    - `ON DELETE SET NULL`: If a customer is deleted, the `customer_id` on their orders is set to `NULL`.
+    - `ON DELETE RESTRICT` (Default): Prevents deleting the customer as long as they have associated orders.
+
+- **Syntax & Practical Example**:
+  Let's connect a child `orders` table to our parent `customers` table:
+
+  ```sql
+  -- Parent Table
+  CREATE TABLE customers (
+      id SERIAL PRIMARY KEY,
+      name VARCHAR(100) NOT NULL,
+      email VARCHAR(100) UNIQUE
+  );
+
+  -- Child Table with Foreign Key
+  CREATE TABLE orders (
+      order_id SERIAL PRIMARY KEY,
+      order_date DATE DEFAULT CURRENT_DATE,
+      total_amount NUMERIC(10, 2) NOT NULL,
+      customer_id INT REFERENCES customers(id) ON DELETE CASCADE
+  );
+  ```
+  - Here, `customer_id` in `orders` is the **Foreign Key**.
+  - It references `id` in the `customers` table (`REFERENCES customers(id)`).
+  - If you try to insert an order with `customer_id = 99` when no customer with `id = 99` exists, PostgreSQL will **reject the query** with a foreign key violation error.
+
+---
+
+#### 3. Primary Key vs. Foreign Key Comparison
+
+| Feature | Primary Key (PK) | Foreign Key (FK) |
+|:---|:---|:---|
+| **Role & Purpose** | Uniquely identifies each record within its own table. | Establishes a link to a primary key in another (or same) table. |
+| **Integrity Type** | Enforces **Entity Integrity** (identifies rows). | Enforces **Referential Integrity** (maintains relationships). |
+| **Uniqueness** | **Strictly unique** — no duplicate values allowed. | **Can have duplicates** — multiple child rows can point to one parent row. |
+| **`NULL` Values** | **Never allowed** (`NOT NULL` is strictly enforced). | **Allowed by default** (unless configured with `NOT NULL`). |
+| **Count per Table** | Only **one** primary key per table. | A table can have **multiple** foreign keys (e.g., linking to users, products, stores). |
+| **Automatic Index** | PostgreSQL automatically creates a unique index. | An index is **not** created automatically; it is recommended to manually index FK columns for join performance. |
+
+---
+
+### D. Inspect Table Schema
 To check the description and columns of your table inside the `psql` shell:
 
 ```sql
